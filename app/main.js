@@ -5,8 +5,9 @@ console.log("Logs from your program will appear here!");
 
 const server = net.createServer((socket) => {
   socket.on("data", (data) => {
-    const stringedData = data.toString().split(" ")[2];
-    if (stringedData == "/index.html") {
+    const stringedData = data.toString().split(" ")[1];
+    console.log("********************" + stringedData);
+    if (stringedData == "/") {
       const response1 = "HTTP/1.1 200 OK\r\n\r\n";
       socket.write(response1);
     } else {
