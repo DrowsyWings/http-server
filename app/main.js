@@ -6,14 +6,18 @@ const server = net.createServer((socket) => {
   socket.on("data", (data) => {
     const request = data.toString();
 
-    console.log("Request: \n" + request);
-
     const url = request.split(" ")[1];
 
     if (url == "/") {
       socket.write("HTTP/1.1 200 OK\r\n\r\n");
     } else if (url.includes("/echo/")) {
       const content = url.split("/echo/")[1];
+
+      socket.write(
+        `HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: ${content.length}\r\n\r\n${content}`
+      );
+    } else if (url.includes("/user-Agent")) {
+      const content = request.split("User-Agent: ")[1].split(" ")[0].trimEnd();
 
       socket.write(
         `HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: ${content.length}\r\n\r\n${content}`
