@@ -30,18 +30,15 @@ const server = net.createServer((socket) => {
   //Error Handling
 
   socket.on("error", (e) => {
-    console.error("ERROR: " + e);
-
+    console.warn("ERROR: " + e);
+    socket.write("HTTP/1.1 500\r\n\r\n");
     socket.end();
-
-    socket.close();
   });
 
   //Closing
 
   socket.on("close", () => {
     socket.end();
-
     server.close();
   });
 });
