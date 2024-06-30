@@ -16,6 +16,18 @@ const server = net.createServer((socket) => {
       socket.write(
         `HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: ${content.length}\r\n\r\n${content}`
       );
+    } else if (
+      url.startsWith("/files/") &&
+      data.toString().split(" ")[0] == "POST"
+    ) {
+      let fileName = url.split("/")[2];
+
+      const filePath = process.argv[3] + "/" + fileName;
+      const file = data.toString("utf-8").split("\r\n\r\n")[1];
+
+      fs.writeFileSync(filePath, file);
+
+      socket.write("HTTP/1.1 201 CREATED\r\n\r\n");
     } else if (url.startsWith("/files/")) {
       const directory = process.argv[3];
       const fileName = url.split("/files/")[1];
